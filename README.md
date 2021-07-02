@@ -24,6 +24,14 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
+#### Configure Environment Variables
+- Create .env file
+- Add both active and testing database urls
+```
+DATABASE_URL=sqlite:///development_database.db
+TEST_DATABASE_URL=sqlite:///./test.db
+```
+
 ## Run it
 
 ```sh
