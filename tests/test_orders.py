@@ -66,6 +66,28 @@ def test_read_order():
     }
 
 
+def test_read_one_order():
+    response = client.get("/orders/1")
+    assert response.status_code == 200
+    assert response.json() == {
+        "message": "Order Fetched Successfully",
+        "data":
+            {
+                "id": 1,
+                "item_id": 2,
+                "shopping_cart_id": 2,
+                "requested_quantity": 1,
+                "total_cost": 130.12,
+            }
+    }
+
+    response = client.get("/orders/7")
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Order not found"
+    }
+
+
 def test_update_order():
     response = client.patch(
         "/orders/1",

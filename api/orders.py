@@ -17,6 +17,14 @@ def find(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     return {"message": "Orders Fetched Successfully", "data": orders}
 
 
+@router.get("/{order_id}")
+def find(order_id: int, db: Session = Depends(get_db)):
+    order = db.query(Order).get(order_id)
+    if order is None:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return {"message": "Order Fetched Successfully", "data": order}
+
+
 @router.post("/")
 def create(order: OrderBase, db: Session = Depends(get_db)):
     item = db.query(Item).filter(Item.id == order.item_id).one_or_none()

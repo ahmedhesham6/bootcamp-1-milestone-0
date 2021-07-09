@@ -4,7 +4,7 @@ Build a simple RESTful CRUD API for a merchant application to manage 2 resources
 
 ## Installation
 
- requires [Python](https://www.python.org/) v3.6+ to run.
+ requires [Python](https://www.python.org/) v3.7+ to run.
  
 #### Clone
 

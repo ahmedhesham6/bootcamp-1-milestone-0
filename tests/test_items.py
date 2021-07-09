@@ -53,6 +53,27 @@ def test_read_item():
     }
 
 
+def test_read_one_item():
+    response = client.get("/items/1")
+    assert response.status_code == 200
+    assert response.json() == {
+        "message": "Item Fetched Successfully",
+        "data":
+            {
+                "id": 1,
+                "name": "Item1",
+                "cost": 22.19,
+                "available_quantity": 18
+            }
+    }
+
+    response = client.get("/items/7")
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Item not found"
+    }
+
+
 def test_update_item():
     response = client.patch(
         "/items/3",

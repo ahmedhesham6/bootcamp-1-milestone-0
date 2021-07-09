@@ -2,7 +2,7 @@ from sqlalchemy.sql.expression import true
 from . import get_db
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import Item
+from models import Item, item
 from schema import ItemBase, ItemUpdate
 
 router = APIRouter(
@@ -16,6 +16,14 @@ router = APIRouter(
 def find(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     items = db.query(Item).offset(skip).limit(limit).all()
     return {"message": "Items Fetched Successfully", "data": items}
+
+
+@router.get("/{item_id}")
+def find(item_id: int, db: Session = Depends(get_db)):
+    item = db.query(Item).get(item_id)
+    if item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return {"message": "Item Fetched Successfully", "data": item}
 
 
 @router.post("/")
