@@ -1,0 +1,56 @@
+config:
+  target: "http://ec2-3-131-95-241.us-east-2.compute.amazonaws.com"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 100
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 100
+      name: Sustained load
+scenarios:
+  - name: "Create Items and Orders"
+    flow:
+      - post:
+          url: "/items"
+          json:
+              name: "Item 1"
+              cost: 20
+              available_quantity: 3
+          capture:
+            - json: "$.results.data.id"
+              as: "itemId"
+      - get:
+          url: "/items"
+      - get:
+          url: "/items/{{ itemId }}"
+      - patch:
+          url: "/items/{{ itemId }}"
+          json:
+            name: "Item 1 edited"
+      - think: 5
+      - post:
+          url: "/orders"
+          json:
+            item_id: "{{itemId}}"
+            shopping_cart_id: 2
+            requested_quantity: 1
+          capture:
+            - json: "$.results.data.id"
+              as: "orderId"
+      - get:
+          url: "/orders"
+      - get:
+          url: "/orders/{{ orderId }}"
+      - patch:
+          url: "/orders/{{ orderId }}"
+          json:
+            shopping_cart_id: 1   
+      - think: 5 
+      - delete:
+          url: "/orders/{{ orderId }}" 
+      - delete:
+          url: "/items/{{ itemId }}" 
