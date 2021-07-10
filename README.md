@@ -46,7 +46,5 @@ $ pytest
 
 # Milestone 2
 
-You can find the full description of manual deployment in
- ``` 
- ./manual_deployment.md
- ```
+You can find the full description of manual deployment in this [Document](/manual_deployment.md)
+
