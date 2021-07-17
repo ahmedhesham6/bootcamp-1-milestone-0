@@ -28,6 +28,29 @@ After creating an account on AWS free tier
 
 ### Connecting to instance
 
+After Hitting launch we need to make sure of the connection method so we:
+
+- Create a new key pair
+
+![Screenshot](img/launch_key_pair.png)
+
+- Download key pair in .ssh file then we launch the instance
+
+![Screenshot](img/download_key_pair.png)
+
+After launching the instance we go to the instance dashboard
+
+![Screenshot](img/instance_dashboard.png)
+
+- Click Connect an go to "SSH Client" tab
+
+![Screenshot](img/connect_ssh_client.png)
+
+- We follow the instructions to connect to the server through terminal
+
+![Screenshot](img/terminal_instance.png)
+
+
 ### Installing Postgres
 
 ### Installing Nginx
