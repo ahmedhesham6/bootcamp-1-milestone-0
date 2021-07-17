@@ -316,13 +316,13 @@ check if there is `Active` status is `active (running)`
 
 - Install Artillery from [Link](https://artillery.io/docs/guides/getting-started/installing-artillery.html)
 
-- Adding configuration to `./load_test/load_test.yaml`
+- Adding configuration to `./load_test/load_test_2.yaml`
 
 - Run Load Test
 
 ```sh
 cd ./load_test
-artillery run --output test_report.json load_test.yaml
+artillery run --output test_report_2.json load_test_2.yaml
 ```
 
 - Report
