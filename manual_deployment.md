@@ -158,10 +158,18 @@ check if there is `Active` status is `active (running)`
 - Adjust nginx default to route to needed port
 
 ```shell
-nano /etc/nginx/sites-avaliable/default 
+nano /etc/nginx/sites-available/default 
 ```
 
-since we now that our fast api application will run on port 8000 we adjsut nginx configuration as follows
+since we now that our fast api application will run on port 8000 we adjust nginx default configuration as follows
+
+---
+**NOTE**
+
+Since no other services will run on this server we adjusted the `default` configuration but the right way is to add new configuration for each service in the following directories
+- `sites-available`
+- `sites-enabled`
+---
 
 ```shell
         location / {;
@@ -184,12 +192,149 @@ sudo systemctl restart nginx
 
 ### Cloning the Project
 
-### Installing Uvicorn
+In our root directory we
 
-### Creating Service
+- Clone 
 
-### Load Testing Configuration
+```sh
+git clone https://github.com/ahmedhesham6/bootcamp-1-milestone-0.git
+cd bootcamp-1-milestone-0
+```
 
-### Load Testing Report
+- Check python version
+```sh
+python3 -V
+```
+---
+**NOTE**
+If python version is less than 3.7 please update python version using this [Tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-programming-environment-on-an-ubuntu-20-04-server)
+
+---
+
+- Install Virtualenv
+```sh
+python3 -m venv venv
+. venv/bin/activate
+```
+
+- Install Dependencies
+```sh
+(venv) $ pip install -r requirements.txt
+```
+
+- Configure Environment Variables
+
+    - Create .env file
+    - Add both active database urls
+```
+DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DATABASE
+```
+
+- Run It
+
+```sh
+(venv) $ uvicorn main:app
+```
+Then open the browser and use the server url, and check the app is running
+
+### Process Persistence
+
+- Install Gunicorn
+
+```sh
+(venv) $ pip install gunicorn
+```
+
+- Run app
+
+```sh
+(venv) $ gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+```
+Then open the browser and use the server url, and check the app is running
+
+- Create ASGI Server
+
+```sh
+sudo nano /etc/systemd/system/devopzilla.service
+```
+
+Then add the following configuration
+
+```sh
+[Unit]
+Description=Gunicorn instance to serve MyApp
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+Restart=on-failure
+RestartSec=1
+StartLimitBurst=5
+StartLimitIntervalSec=10
+StartLimitAction=reboot
+WorkingDirectory=/home/ubuntu/bootcamp-1-milestone-0
+Environment="PATH=/home/ubuntu/bootcamp-1-milestone-0/devopenv/bin"
+ExecStart=/home/ubuntu/bootcamp-1-milestone-0/devopenv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+
+[Install]
+WantedBy=multi-user.target
+```
+
+---
+**NOTE**
+- StartLimitBurst and StartLimitIntervalSec say that service can be restarted at most 5 times in a 10 second interval
+- WorkingDirectory: project directory
+- Environment: environment path
+- StartLimitAction asks to reboot the system if the service still fails after all those restarts
+---
+
+Save the file an exit
+
+- Enable the service
+
+```sh
+sudo systemctl enable devopzilla.service
+```
+---
+**NOTE**
+Enabled means it will run on boot
+
+---
+
+- Check Status
+
+```sh
+systemctl status devopzilla.service
+```
+
+check if there is `Active` status is `active (running)`
+
+- Server is successfully deployed
+
+### Load Testing
+
+- Install Artillery from [Link](https://artillery.io/docs/guides/getting-started/installing-artillery.html)
+
+- Adding configuration to `./load_test/load_test.yaml`
+
+- Run Load Test
+
+```sh
+cd ./load_test
+artillery run --output test_report.json load_test.yaml
+```
+
+- Report
+
+![Screenshot](img/test_1.png)
+![Screenshot](img/test_2.png)
+![Screenshot](img/test_3.png)
+![Screenshot](img/test_4.png)
+![Screenshot](img/test_5.png)
+![Screenshot](img/test_6.png)
+
+
+
 
 

@@ -28,8 +28,8 @@ pip install -r requirements.txt
 - Create .env file
 - Add both active and testing database urls
 ```
-DATABASE_URL=sqlite:///development_database.db
-TEST_DATABASE_URL=sqlite:///./test.db
+DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DATABASE
+TEST_DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/TEST_DATABASE
 ```
 
 ## Run it
